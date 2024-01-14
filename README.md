@@ -9,6 +9,8 @@
 
 - add your api configs in productConfig.json to create a api according to your product needs
 
+- example is for product : customers
+
 ### Running
 
 - Not using nodemon as if your node version is greater than Node.js 18.11.0, you can directly use --watch flag(else add nodemon as dev dependency using node install -D nodemon, and then run using nodemon index.js or npx nodemon)
