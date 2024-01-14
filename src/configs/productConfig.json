@@ -1,0 +1,19 @@
+{
+    "productName": "customers",
+    "collectionName": "Customer",
+    "schema": {
+        "name": {
+            "type": "String",
+            "required": true
+        },
+        "industry": "String",
+        "orders":[
+            {
+                "description":"String",
+                "amountInRs":"Number"
+            }
+        ]
+    },
+    "routeStructure": "/api/v1/customers",
+    "_comments": ["productName should be plural"]
+}
