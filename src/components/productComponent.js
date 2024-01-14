@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import productConfig from "../configs/productConfig.json" assert { type: "json" };
 
 const productSchemaObject = productConfig.schema;
+const productName = productConfig.productName;
+const singularProductName = productName.slice(0, -1);
 
 export const createProduct = async (req, res) => {
     console.log(req.body);
@@ -20,10 +22,12 @@ export const createProduct = async (req, res) => {
 
     // but we can directly pass req.body
 
-    const product = new ProductModel(req.body); // extra or incorrect keys will be ignored.
     try {
+        const product = new ProductModel(req.body); // extra or incorrect keys will be ignored.
+        const productObject = {};
         await product.save();
-        res.status(201).json({ product }); // product property is there
+        productObject[productName] = product;
+        res.status(201).json(productObject); // product property is there
         // res.status(201).json( product )
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -33,8 +37,10 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     //   console.info(await mongoose.connection.db.listCollections().toArray());
     try {
+        const productObject = {};
         const products = await ProductModel.find();
-        res.json({ products });
+        productObject[productName] = products;
+        res.json(productObject);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -45,12 +51,14 @@ export const getProduct = async (req, res) => {
     const { id: productId } = req.params; // destructuring and renaming
     console.info(productId);
     try {
+        const productObject = {};
         const product = await ProductModel.findById(productId);
-        console.info(product);
+        productObject[singularProductName] = product;
+        console.info(productObject);
         if (!product) {
             return res.status(404).json({ error: "User not found" });
         }
-        res.json({ product });
+        res.json(productObject);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -58,13 +66,21 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
+        const productObject = {};
         const productId = req.params.id;
-        const result = await ProductModel.replaceOne(
+
+        // const result = await ProductModel.replaceOne(
+        //     { _id: productId },
+        //     req.body
+        // );
+        const result = await ProductModel.findOneAndReplace(
             { _id: productId },
-            req.body
-        );
-        console.info(result);
-        res.json({ updatedCount: result.modifiedCount });
+            req.body,
+            { new: true } // added flag to change the default functionality
+        ); // changes the data in db but returns the original data
+        productObject[singularProductName] = result;
+        console.info(productObject);
+        res.json(productObject);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
