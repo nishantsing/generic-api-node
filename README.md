@@ -52,7 +52,7 @@ npm i mongodb express mongoose dotenv
 
 
 ### Update (post or put)
-put - replacing the entire object(Idempotent<meaning that making the same request multiple times has the same effect as making it once.>)
-patch - replacing the part(may not be idempotent<meaning that making the same request multiple times may result in different outcomes.>)
+* put - replacing the entire object(Idempotent : meaning that making the same request multiple times has the same effect as making it once.)
+* patch - replacing the part(may not be idempotent : meaning that making the same request multiple times may result in different outcomes.)
 
 - chrome://flags/#enable-experimental-web-platform-features
